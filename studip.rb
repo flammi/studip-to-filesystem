@@ -1,11 +1,19 @@
 require 'nokogiri'
 require 'mechanize'
 require 'highline/import'
+require 'debugger'
 
 class Course
-	attr_reader :name
-	def initialize(name)
-		@name = name
+	attr_reader :name, :files_new
+	def initialize(node)
+		@name = node.content.strip
+		@files_new = false
+		node.parent.parent.css("img").each do |img|
+			attribute = img.attribute("src").value
+			if attribute.index("red") and attribute.index("file")
+				@files_new = true
+			end
+		end
 	end
 end
 
@@ -27,7 +35,7 @@ class Studip
 		doc.css('a[href*="seminar_main.php"]').each do |link| 
 			c = link.content.strip
 			if c != ""
-				res << Course.new(c)
+				res << Course.new(link)
 			end
 		end
 		res
@@ -44,6 +52,15 @@ puts "Trying login..."
 studip = Studip.new(user, pw)
 
 puts "Downloading courses list..."
-(studip.list_courses).each do |course|
-	puts course.name
+res = studip.list_courses.group_by(&:files_new)
+
+puts "Kurse mit neuen Dateien:"
+res[true].each do |course|
+	puts "- #{course.name}"
+end
+
+puts ""
+puts "Kurse ohne neue Dateien:"
+res[false].each do |course|
+	puts "- #{course.name}"
 end
