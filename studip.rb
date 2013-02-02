@@ -1,19 +1,43 @@
 require 'nokogiri'
 require 'mechanize'
-require 'highline/import'
 require 'debugger'
 
 class Course
 	attr_reader :name, :files_new
-	def initialize(node)
+	def initialize(browser, node, cid)
+		@browser = browser
 		@name = node.content.strip
 		@files_new = false
+		@cid = cid
 		node.parent.parent.css("img").each do |img|
 			attribute = img.attribute("src").value
 			if attribute.index("red") and attribute.index("file")
 				@files_new = true
 			end
 		end
+	end
+
+	def files()
+		filepage = @browser.get "http://elearning.uni-bremen.de/folder.php?cid=#{@cid}&cmd=all"
+		doc = Nokogiri::HTML(filepage.body)
+
+		doc.css('a.extern').map do |x|
+			filename = /.*[&?]file_name=([^&?]+).*/.match(x.attribute("href").value)[1]
+			link = x.attribute "href"
+			StudipFile.new @fake_browser, filename, link
+		end
+	end
+end
+
+class StudipFile
+	attr_reader :name, :link
+	def initialize(browser, file_name, link)
+		@browser = browser
+		@name = file_name
+		@link = link
+	end
+	def download_to(location)
+		@browser.get(@link).save_as location
 	end
 end
 
@@ -34,33 +58,12 @@ class Studip
 
 		doc.css('a[href*="seminar_main.php"]').each do |link| 
 			c = link.content.strip
+			link_href = link.attribute("href").value
+			cid = /.*[?&]auswahl=([^&?]+).*/.match(link_href)[1]
 			if c != ""
-				res << Course.new(link)
+				res << Course.new(@fake_browser, link, cid)
 			end
 		end
 		res
 	end
-end
-
-
-
-puts "Studip Notifications download"
-user = ask("Username:") {|q| q.echo = true}
-pw = ask("Password:") {|q| q.echo = false}
-
-puts "Trying login..."
-studip = Studip.new(user, pw)
-
-puts "Downloading courses list..."
-res = studip.list_courses.group_by(&:files_new)
-
-puts "Kurse mit neuen Dateien:"
-res[true].each do |course|
-	puts "- #{course.name}"
-end
-
-puts ""
-puts "Kurse ohne neue Dateien:"
-res[false].each do |course|
-	puts "- #{course.name}"
 end
