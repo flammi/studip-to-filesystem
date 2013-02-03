@@ -15,9 +15,9 @@ Dependencies
 
 Example
 =======
-> ruby ./file-sync
-> Username:
-> <Enter your Studip username here>
-> Password:
-> <Enter your studip username here>
+    $> ruby ./file-sync
+    Username:
+    <Enter your Studip username here>
+    Password:
+    <Enter your studip username here>
 
