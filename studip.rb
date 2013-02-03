@@ -23,8 +23,8 @@ class Course
 
 		doc.css('a.extern').map do |x|
 			filename = /.*[&?]file_name=([^&?]+).*/.match(x.attribute("href").value)[1]
-			link = x.attribute "href"
-			StudipFile.new @fake_browser, filename, link
+			link = x.attribute("href").value
+			StudipFile.new @browser, filename, link
 		end
 	end
 end
@@ -37,7 +37,12 @@ class StudipFile
 		@link = link
 	end
 	def download_to(location)
-		@browser.get(@link).save_as location
+		file = @browser.get(@link)
+		if file.respond_to?("save_as")
+			file.save_as location
+		else
+			puts "Error: Skipping file #{file}"
+		end
 	end
 end
 

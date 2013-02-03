@@ -9,11 +9,22 @@ pw = ask("Password:") {|q| q.echo = false}
 puts "Trying login..."
 studip = Studip.new(user, pw)
 
-#Part Download new files
 studip.list_courses.each do |course|
-	puts " - #{course.name}"
-	course.files.each do |file|
-		puts file.name
+	puts " * #{course.name}"
+	#Klammern aus dem Namen entfernen
+	clean_up_name = course.name.gsub(/\([^\)]*\)/, "").strip
+	#Slashes entfernen
+	clean_up_name = clean_up_name.gsub("/", "")
+	if not File.directory? clean_up_name
+		Dir::mkdir(clean_up_name)
+		puts " - Creating dir #{clean_up_name}"
 	end
-	#file.download_to "test/#{file.name}"
+
+	course.files.each do |file|
+		filepath = "#{clean_up_name}/#{file.name}"
+		if not File::exists? filepath
+			puts " - Downloading file #{file.name} to #{filepath}"
+			file.download_to "#{filepath}"
+		end
+	end
 end
