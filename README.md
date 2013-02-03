@@ -9,7 +9,7 @@ drive. If the initial copy has finished the tool will fetch the new files and do
 Dependencies
 ============
 
-- Ruby
+- Ruby >= 1.9
 - Nokogiri
 - Mechanize
 
