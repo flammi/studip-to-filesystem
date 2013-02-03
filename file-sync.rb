@@ -1,6 +1,6 @@
 require 'highline/import'
-require_relative 'studip'
-require_relative 'project_dir_mananger'
+require_relative 'lib/studip'
+require_relative 'lib/project_dir_mananger'
 
 puts "Studip Files Download"
 user = ask("Username:") {|q| q.echo = true}

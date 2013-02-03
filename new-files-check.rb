@@ -1,6 +1,6 @@
 require 'highline/import'
 
-require_relative 'studip'
+require_relative 'lib/studip'
 
 puts "Studip Notifications download"
 user = ask("Username:") {|q| q.echo = true}
