@@ -3,7 +3,7 @@ require 'mechanize'
 require 'debugger'
 
 class Course
-	attr_reader :name, :files_new
+	attr_reader :name, :files_new, :cid
 	def initialize(browser, node, cid)
 		@browser = browser
 		@name = node.content.strip
@@ -72,3 +72,4 @@ class Studip
 		res
 	end
 end
+
