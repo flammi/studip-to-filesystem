@@ -10,15 +10,14 @@ On the initial copy the tool will create a folder for each course and save the f
 simplified names, simply rename the folders to something you like more. On the next run of the script it will recognize
 the rename and update the renamed folders.
 
-Dependencies
-============
+### Dependencies
+
 
 - Ruby >= 1.9
 - Nokogiri
 - Mechanize
 
-Example
-=======
+### Example
     $> ruby ./file-sync
     Username:
     <Enter your Studip username here>
