@@ -7,7 +7,7 @@ user = ask("Username:") {|q| q.echo = true}
 pw = ask("Password:") {|q| q.echo = false}
 
 puts "Trying login..."
-studip = Studip.new(user, pw)
+studip = Studip.new("http://elearning.uni-bremen.de", user, pw)
 
 #Loading dir structure
 pm = ProjectDirManager.new
