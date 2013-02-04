@@ -16,11 +16,18 @@ the rename and update the renamed folders.
 - Ruby >= 1.9
 - Nokogiri
 - Mechanize
+- Highline
+
+### Preparation
+    $> gem install highline mechanize nokogiri
 
 ### Example
-    $> ruby ./file-sync
+    cd <Studip DL Folder>
+    $> ruby ./studip init http://elearning.uni-bremen.de
     Username:
     <Enter your Studip username here>
     Password:
     <Enter your studip username here>
+    $> ruby ./studip sync
+    <The data of your courses are copied now to this dir>
 
