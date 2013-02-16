@@ -14,11 +14,11 @@ res = studip.list_courses.group_by(&:files_new)
 
 puts "Kurse mit neuen Dateien:"
 res[true].each do |course|
-	puts "- #{course.name}"
+  puts "- #{course.name}"
 end
 
 puts ""
 puts "Kurse ohne neue Dateien:"
 res[false].each do |course|
-	puts "- #{course.name}"
+  puts "- #{course.name}"
 end

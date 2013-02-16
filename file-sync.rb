@@ -14,15 +14,17 @@ pm = ProjectDirManager.new
 pm.import_dirs(".")
 
 studip.list_courses.each do |course|
-	puts " * #{course.name}"
+  puts " * #{course.name}"
 
-	dlDir = pm.dir_for(course.name, course.cid)
+  dlDir = pm.dir_for(course.name, course.cid)
 
-	course.files.each do |file|
-		filepath = "#{dlDir}/#{file.name}"
-		if not File::exists? filepath
-			puts " - Downloading file #{file.name} to #{filepath}"
-			file.download_to "#{filepath}"
-		end
-	end
+  if course.files != nil
+    course.files.each do |file|
+      filepath = "#{dlDir}/#{file.name}"
+      if not File::exists? filepath
+        puts " - Downloading file #{file.name} to #{filepath}"
+        file.download_to "#{filepath}"
+      end
+    end
+  end
 end
