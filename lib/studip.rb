@@ -47,9 +47,9 @@ class StudipFile
 end
 
 class Studip
-	def initialize(username, password)
+	def initialize(url, username, password)
 		@fake_browser = Mechanize.new
-		p = @fake_browser.get "http://elearning.uni-bremen.de/"
+		p = @fake_browser.get url
 		login_form = p.form_with :name => "login"
 		login_form.field_with(:name => "loginname").value = username
 		login_form.field_with(:name => "password").value = password

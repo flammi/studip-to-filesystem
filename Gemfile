@@ -1,0 +1,5 @@
+source "https://rubygems.org"
+gem "nokogiri"
+gem "mechanize"
+gem "highline"
+gem "debugger"
