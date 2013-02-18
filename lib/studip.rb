@@ -54,6 +54,9 @@ class StudipFile
 
 end
 
+class LoginFailed < StandardError
+end
+
 class Studip
 
   def initialize(url, username, password)
@@ -62,7 +65,13 @@ class Studip
     login_form = p.form_with :name => "login"
     login_form.field_with(:name => "loginname").value = username
     login_form.field_with(:name => "password").value = password
-    @fake_browser.submit login_form
+    result_page = @fake_browser.submit login_form
+
+    #Check for successful login
+    html_result = result_page.body
+    if html_result.index("Bei der Anmeldung trat ein Fehler auf") != nil
+	    raise LoginFailed
+    end
   end
 
   def list_courses()
