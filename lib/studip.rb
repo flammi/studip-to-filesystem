@@ -1,6 +1,5 @@
 require 'nokogiri'
 require 'mechanize'
-require 'debugger'
 
 class Course
   attr_reader :name, :files_new, :cid
